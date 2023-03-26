@@ -10,5 +10,8 @@
   "license": "ISC",
   "bin": {
     "my-vite": "bin/vite.js"
+  },
+  "dependencies": {
+    "commander": "^10.0.0"
   }
 }

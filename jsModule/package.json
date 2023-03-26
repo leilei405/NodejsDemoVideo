@@ -1,7 +1,6 @@
 {
-  "name": "my-vite",
+  "name": "jsmodule",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,10 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "bin": {
-    "my-vite": "bin/vite.js"
-  },
-  "dependencies": {
-    "commander": "^10.0.0"
-  }
+  "type": "module"
 }

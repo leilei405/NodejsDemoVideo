@@ -5,6 +5,10 @@ const app = express();
 
 const readFile = promisify(fs.readFile)
 
+// 请求的数据格式
+app.use(express.urlencoded())
+app.use(express.json())
+
 // get
 app.get('/', async (req, res) => {
     try {
@@ -17,7 +21,14 @@ app.get('/', async (req, res) => {
 })
 
 // post
-// app.post()
+app.post('/', async (req, res) => {
+    try {
+        console.log(req.headers);
+        console.log(req.body);
+    } catch (error) {
+        
+    }
+})
 
 app.listen(3333, () => {
     console.log('listening on port 3333');

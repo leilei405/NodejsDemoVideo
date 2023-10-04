@@ -41,6 +41,36 @@ app.post('/', async (req, res) => {
     }
 })
 
+// put
+app.put('/:id', async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body);
+    try {
+        let userInfo = await getUserList()
+        let userId = Number.parseInt(req.params.id)
+        let user = userInfo.users.find(item => item.id === userId)
+        if (!user) {
+            res.status(403).json({
+                error: '用户不存在'
+            })
+        }
+        // res.send(user)
+        const body = req.body
+        user.username = body.username ? body.username : user.username
+        user.age = body.age ? body.age : user.age
+        userInfo.users[userId-1] = user
+        if (!await serverDbAdd(userInfo)) {
+            res.status(201).json({
+                msg: '修改成功'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            error
+        })
+    }
+})
+
 app.listen(3333, () => {
     console.log('listening on port 3333');
 });

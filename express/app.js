@@ -1,20 +1,16 @@
 const express = require('express');
-const fs = require('fs');
-const { promisify } = require('util')
 const app = express();
-
-const readFile = promisify(fs.readFile)
+const { getUserList, serverDbAdd } = require('./db')
 
 // 请求的数据格式
-app.use(express.urlencoded())
+// app.use(express.urlencoded())
 app.use(express.json())
 
 // get
 app.get('/', async (req, res) => {
     try {
-        const back = await readFile('./db.json', 'utf8')
-        const jsonObj = JSON.parse(back)
-        res.send(jsonObj.users)
+        let back = await getUserList()
+        res.send(back.users)
     } catch (error) {
         res.status(500).json({error})
     }
@@ -22,11 +18,26 @@ app.get('/', async (req, res) => {
 
 // post
 app.post('/', async (req, res) => {
+    let body = req.body
+    if (!body) {
+        res.status(403).json({
+            error: '缺少用户信息'
+        })
+    }
+    let jsonObj = await getUserList()
+    body.id = jsonObj.users[jsonObj.users.length - 1].id + 1
+    jsonObj.users.push(body)
     try {
-        console.log(req.headers);
-        console.log(req.body);
+        let newValue = await serverDbAdd(jsonObj)
+        if (!newValue) {
+            res.status(200).send({
+                msg: '添加成功'
+            })
+        } 
     } catch (error) {
-        
+        res.status(500).json({
+            error: 'Error 请重试!!!'
+        })
     }
 })
 
